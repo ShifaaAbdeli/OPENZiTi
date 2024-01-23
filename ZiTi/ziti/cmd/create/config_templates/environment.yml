@@ -1,0 +1,6 @@
+{{ $commentPrefix := .OSCommentPrefix }}
+{{ $varDeclare := .OSVarDeclare }}
+{{- range .EnvVars}}
+{{ $commentPrefix }} {{ .Description }}
+{{ $varDeclare }} {{ .Name }}={{ .Value }}
+{{- end }}

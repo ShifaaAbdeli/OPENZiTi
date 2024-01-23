@@ -1,0 +1,52 @@
+v: 3
+raft:
+  minClusterSize: 3
+  dataDir: ./data/ctrl1
+  bootstrapMembers:
+    - tls:127.0.0.1:6363
+    - tls:127.0.0.1:6464
+
+identity:
+  cert: ./pki/ctrl1/certs/server.chain.pem
+  key: ./pki/ctrl1/keys/server.key
+  ca: ./pki/ctrl1/certs/ctrl1.chain.pem
+
+ctrl:
+  listener: tls:127.0.0.1:6262
+  options:
+    advertiseAddress: tls:localhost:6262
+
+#events:
+#  jsonLogger:
+#    subscriptions:
+#      - type: fabric.cluster
+#    handler:
+#      type: file
+#      format: json
+#      path: /tmp/ziti-events.log
+
+edge:
+  api:
+    address: 127.0.0.1:1280
+  enrollment:
+    signingCert:
+      cert: ./pki/ctrl1/certs/ctrl1.cert
+      key: ./pki/ctrl1/keys/ctrl1.key
+    edgeIdentity:
+      duration: 5m
+    edgeRouter:
+      duration: 5m
+
+web:
+  - name: all-apis-localhost
+    bindPoints:
+      - interface: 127.0.0.1:1280
+        address: 127.0.0.1:1280
+    options:
+      minTLSVersion: TLS1.2
+      maxTLSVersion: TLS1.3
+    apis:
+      - binding: health-checks
+      - binding: fabric
+      - binding: edge-management
+      - binding: edge-client
